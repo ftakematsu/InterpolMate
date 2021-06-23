@@ -1,0 +1,43 @@
+CODE:	FORM-A																		
+																			
+CLASSES:																			
+SYMBOL	SCALE	DECOMPOSITION	INDEXATION	DEFINITION															
+$	0	FREE	FREE	IMPLICIT															
+P	1	FREE	FREE	EXPLICIT															
+T	2	FREE	FREE	EXPLICIT															
+S	2	FREE	FREE	EXPLICIT															
+G	2	FREE	FREE	EXPLICIT															
+U	3	FREE	FREE	EXPLICIT															
+E	4	FREE	FREE	EXPLICIT															
+																			
+																			
+DESCRIPTION:																			
+LEFT	RIGHT	RELTYPE	MAX																
+T	T	+	?																
+T	S	+	?																
+S	S	<	1																
+S	S	+	?																
+S	G	+	?																
+U	U	<	1																
+U	U	+	?																
+E	E	<	1																
+E	E	+	?																
+																			
+FEATURES:																			
+NAME	TYPE																		
+																			
+AlfaRamo	REAL																		
+Sexo	STRING																		
+Local	STRING																		
+CompEnt	REAL																		
+AreaFolha	REAL																		
+AlfaFolha	REAL																		
+Day	DD/MM/YY																		
+CompTronco	REAL																		
+AlfaTronco	REAL																		
+AlturaSup	REAL																		
+AlfaSup	REAL																		
+CompSRam	REAL																		
+																			
+MTG:																			
+ENTITY-CODE								AlfaRamo	Sexo	Local	CompEnt	AreaFolha	AlfaFolha	Day	CompTronco	AlfaTronco	AlturaSup	AlfaSup	CompSRam

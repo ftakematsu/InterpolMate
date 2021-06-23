@@ -1,0 +1,124 @@
+g=MTG("databases\MTGFiles\ErvaMate\3D_FR\Planta1FUSObs38.mtg")
+#g=MTG("databases\MTGFiles\ErvaMate\3D_FR\Planta1FUSObs12.mtg")
+#g=MTG("databases\MTGFiles\ErvaMate\3D_FR\Planta1FUSObs7.mtg")
+
+#g=MTG("databases\MTGFiles\ErvaMate\3D_FR\Planta23MOObs38.mtg")
+#g=MTG("databases\MTGFiles\ErvaMate\3D_FR\Planta23MOObs12.mtg")
+#g=MTG("databases\MTGFiles\ErvaMate\3D_FR\Planta23MOObs7.mtg")
+
+#g=MTG("databases\MTGFiles\ErvaMate\3D_FR\Planta30MOObs38.mtg")
+#g=MTG("databases\MTGFiles\ErvaMate\3D_FR\Planta30MOObs12.mtg")
+#g=MTG("databases/MTGFiles/ErvaMate/3D_FR/Planta30MOObs38.mtg")
+
+
+#########################################################
+# funções para recuperar os atributos das colunas no MTG:
+#########################################################
+alfa_ramo(_x) = Feature(_x, "AlfaRamo")
+alfa_folha(_x) = Feature(_x, "AlfaFolha")
+comp_tronco(_x) = Feature(_x, "CompTronco")
+alfa_tronco(_x) = Feature(_x, "AlfaTronco")
+altura_sup(_x) = Feature(_x, "AlturaSup")
+alfa_sup(_x) = Feature(_x, "AlfaSup")
+comp_s(_x) = Feature(_x, "CompSRam")
+data(_x) = Feature(_x, "Day")
+area_foliar(_x) = Feature(_x, "AreaFolha")
+comprimento_entreno(_x) = Feature(_x, "CompEnt")
+
+
+#########################################################
+# Vetores
+#########################################################
+plantas = VtxList(Scale->1) #Vetor com todas as plantas
+suportes = Foreach _x In VtxList(Scale->2) : Select(_x, Class(_x) == 'S') #Vetor com todos os suportes
+galhos = Foreach _x In VtxList(Scale->2): Select(_x, Class(_x) == 'G') #Vetor com todos os galhos
+tr = Foreach _x In VtxList(Scale->2): Select(_x, Class(_x) == 'T') #Vetor com todos os troncos
+unidades = VtxList(Scale->3) #Vetor com todas as unidades de crescimento
+entrenos = VtxList(Scale->4) #Vetor com todos os entrenos
+
+
+
+
+#######################################
+#  Representacao Geometrica
+#######################################
+
+p1 = plantas@1 #primeira planta do vetor
+
+dr1 = DressingData("databases\MTGFiles\ErvaMate\ervamate.drf")
+
+
+
+bottom_diameter(_x) = If Class(Complex(_x, Scale->2)) == 'T' And Rank(_x) == 0 Then 6 Else \
+	If Class(Complex(_x, Scale->2)) == 'S' And Rank(_x) == 0 Then 4 Else \
+	If Class(Complex(_x, Scale->2)) == 'G' Then Switch Order(_x) \
+		Case 2 : 1.2 \
+		Case 3 : 0.7 \
+		Case 4 : 0.5 \
+		Case 5 : 0.4 \
+		Default : Undef \
+	Else Undef
+
+top_diameter(_x) = If Class(Complex(_x, Scale->2)) == 'T' Then 4.5 Else \
+	If Class(Complex(_x, Scale->2)) == 'S' Then 2.5 Else \
+	If _x == Axis(_x)@-1 Then 0.4 Else Undef
+
+long(_x) = If Class(Complex(_x, Scale->2)) == 'T' Then altura_sup(Sons(_x, EdgeType->'+')@1) Else \
+	If Class(Complex(_x, Scale->2)) == 'S' Then comp_s(_x) Else \
+	comprimento_entreno(_x)
+
+alpha(_x) = If Class(Complex(_x, Scale->2)) == 'T' Then alfa_tronco(_x) Else \
+	If Class(Complex(_x, Scale->2)) == 'S' Then alfa_sup(_x) Else \
+	If Class(Complex(_x, Scale->2)) == 'G' Then alfa_ramo(_x) Else Undef
+
+
+
+pframe = PlantFrame(p1, Scale->4, DressingData-> dr1, Length->long, \
+	Alpha->alpha, BottomDiameter->bottom_diameter, TopDiameter->top_diameter)
+	
+
+	
+##########################################################
+#para atribuir a area de folhas para cada entrenó 
+#########################################################
+area_foliar(_x) = Feature(_x, "AreaFolha")
+long_f(_x) = Sqrt(area_foliar(_x))*1.93
+dia_f(_x) = Sqrt(area_foliar(_x))*1.83
+
+
+
+
+
+
+gammaf(_x) = 90
+phyllof(_x) = 137.5
+w(_x) = 1
+leaf_color(_x) = Green
+
+# considerando que a folha existe ou nao
+tem_area(_x) = If area_foliar(_x) != Undef Then 1 Else 0
+
+virtleaves = VirtualPattern("Leaf",WhorlSize->w, PatternNumber->tem_area,\
+	Alpha->alfa_folha,Phyllotaxy->phyllof,Gamma->gammaf,\
+	Color->leaf_color, Length->long_f, \
+	TopDiameter->dia_f, BottomDiameter->dia_f)
+	
+
+
+
+
+
+plot_completo = Plot(pframe, VirtualLeaves->virtleaves, DressingData->dr1)
+
+############################
+#Filtrar os galhos e tronco e deixar só folhas
+############################			
+#filtro_galhos(_x) = If Class(_x) == 'E' Then False Else True	
+#plot_folhas = Plot(pframe, VirtualLeaves->virtleaves, DressingData->dr1, Filter->filtro_galhos) 
+
+############################
+#Filtrar as folhas
+###########################
+filtro_folhas(_x) = If Class(_x) == 'E' Then True Else False
+plot_galhos = Plot(pframe, VirtualLeaves->virtleaves, DressingData->dr1, Filter->filtro_folhas)
+

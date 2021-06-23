@@ -1,0 +1,75 @@
+# Dressing file for erva-mate
+
+SMBPath = pyhon_files
+
+SMBModel caule = nentn105
+SMBModel folhagem = feuipom
+
+
+BranchPattern applebranch = ervamate.crv
+
+Class E = caule
+Class G = caule
+Class S = caule
+Class F = folhagem
+
+
+LeafAlpha = 45
+LeafBeta  = 144
+LeafLength = 3
+#LeafTopDiameter = 2
+#LeafBottomDiameter = 2
+
+DefaultTrunkCategory = -1
+
+# For a vertical Trunk: DefaultTrunkCategory = -1
+
+Alpha = Absolute
+Phyllotaxy = 137.5
+
+MinLength E = 0.01
+MinTopDiameter E = 0.3
+MinBottomDiameter E = 2
+
+MinLength S = 2
+MinTopDiameter S = 0.5
+MinBottomDiameter E = 3
+
+MinLength U = 0.01
+MinTopDiameter U = 0.3
+MinBottomDiameter U = 2
+
+DefaultAlpha = 60
+DefaultTeta = 0
+DefaultPhi = 90
+DefaultPsi = 180
+
+# For virtual symbols
+
+LeafClass = F
+
+# For branch forms 
+
+#Form 1 = com todos 0s os ramos est?o para cima, mas as ramifica??es de 2a ordem s?o para baixo
+
+#Form 1 = apple22 # form 1 n'est utilise que si DefaultTrunkCategory = 1
+#Form 1 = apple12 # tronc de la plante 100
+#Form 1 = apple1 # tudo ? plagiotrofo!!!!
+
+#Form 2 = apple22  # axes retombants
+#Form 2 = apple222 # axes retombants fortement
+#Form 1 = apple23  # axes 1 plagiotropes, axes 2 e 3 ortotropes
+#Form 1 e 2 = apple23  # axes 1 plagiotropes, axes 2 plagiotropes e 3 ortotropes
+#Form 1 = apple2 #  axes 2 orthotropes, axes 3 retombants
+
+#Form 1 = apple23
+Form 2 = apple333
+#Form 3 = apple2
+#Form 2 = apple333 #  axes 2 plagio et 3 orthotropes
+
+DefaultDistance = 50
+NbPlantsPerLine = 50
+
+
+
+ 
